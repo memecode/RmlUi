@@ -158,7 +158,11 @@ bool Backend::Initialize(const char* window_name, int width, int height, bool al
 	};
 #else
 	auto CreateWindow = [&]() {
-		const Uint32 window_flags = (SDL_WINDOW_OPENGL | (allow_resize ? SDL_WINDOW_RESIZABLE : 0));
+		const Uint32 window_flags = (
+			#if !__APPLE__
+			SDL_WINDOW_OPENGL | 
+			#endif
+			(allow_resize ? SDL_WINDOW_RESIZABLE : 0));
 		SDL_Window* window = SDL_CreateWindow(window_name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
 		// SDL2 implicitly activates text input on window creation. Turn it off for now, it will be activated again e.g. when focusing a text input
 		// field.
